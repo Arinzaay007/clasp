@@ -19,18 +19,25 @@ export const runtime = "nodejs";
 const AAPLX_MINT = "XsbEhLAtcf6HdfpFZ5xEMdqW8nfAvcsP5bdudRLJzJp";
 
 export async function POST(req: NextRequest) {
-  const key = process.env.CLAWPUMP_API_KEY;
+  let body: any = {};
+  try {
+    body = await req.json();
+  } catch {}
+
+  // BYOK: if the user supplies their own Clawpump key, the agent is created
+  // under THEIR account (their dashboard, their control). Otherwise we fall
+  // back to the CLASP demo key and the agent lives in the CLASP account.
+  const userKey =
+    typeof body.userKey === "string" && body.userKey.trim().startsWith("cpk_")
+      ? body.userKey.trim()
+      : null;
+  const key = userKey ?? process.env.CLAWPUMP_API_KEY;
   if (!key) {
     return NextResponse.json(
       { error: "CLAWPUMP_API_KEY not set on server" },
       { status: 500 }
     );
   }
-
-  let body: any = {};
-  try {
-    body = await req.json();
-  } catch {}
 
   const headers = {
     "content-type": "application/json",
@@ -69,6 +76,9 @@ export async function POST(req: NextRequest) {
         agentId: agent.id,
         wallet: agent.walletAddress,
         minSol: 0.013,
+        // whose account owns this agent
+        ownership: userKey ? "yours" : "clasp-demo",
+        dashboard: "https://clawpump.tech/dashboard",
       });
     }
 

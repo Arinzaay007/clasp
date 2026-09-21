@@ -17,6 +17,8 @@ export default function LaunchPad() {
   const [name, setName] = useState('');
   const [symbol, setSymbol] = useState('');
   const [quote, setQuote] = useState<'SOL' | 'AAPLX'>('AAPLX');
+  const [userKey, setUserKey] = useState('');
+  const [ownership, setOwnership] = useState<'yours' | 'clasp-demo'>('clasp-demo');
   const [agentId, setAgentId] = useState('');
   const [wallet, setWallet] = useState('');
   const [sol, setSol] = useState(0);
@@ -36,12 +38,18 @@ export default function LaunchPad() {
       const res = await fetch('/api/launch-agent', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ step: 'create', name, symbol }),
+        body: JSON.stringify({
+          step: 'create',
+          name,
+          symbol,
+          userKey: userKey.trim() || undefined,
+        }),
       });
       const d = await res.json();
       if (!res.ok) throw new Error(d.error);
       setAgentId(d.agentId);
       setWallet(d.wallet);
+      setOwnership(d.ownership ?? 'clasp-demo');
       setPhase('fund');
     } catch (e: any) {
       setErr(e.message ?? 'agent creation failed');
@@ -77,7 +85,14 @@ export default function LaunchPad() {
       const res = await fetch('/api/launch-agent', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ step: 'launch', agentId, name, symbol, quote }),
+        body: JSON.stringify({
+          step: 'launch',
+          agentId,
+          name,
+          symbol,
+          quote,
+          userKey: userKey.trim() || undefined,
+        }),
       });
       const d = await res.json();
       if (!res.ok) throw new Error(d.error);
@@ -152,6 +167,33 @@ export default function LaunchPad() {
                         : 'QUOTE IN SOL'}
                     </button>
                   ))}
+                </div>
+                <div className="rounded-xl border border-[rgba(214,182,116,0.16)] bg-[rgba(214,182,116,0.04)] p-4">
+                  <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-[#9c8763]">
+                    Own your agent (recommended)
+                  </p>
+                  <p className="mt-2 text-[12px] leading-relaxed text-[#cbb28f]">
+                    Paste your own Clawpump API key and the agent is created in{' '}
+                    <span className="text-[#ffe4b4]">your</span> account — you
+                    manage it, chat with it, and collect its fees from your own{' '}
+                    <a
+                      href="https://clawpump.tech"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-[#f0b429] underline decoration-[rgba(240,180,41,0.4)] underline-offset-2"
+                    >
+                      clawpump.tech
+                    </a>{' '}
+                    dashboard. Your key is used for this request only — never
+                    stored. Leave blank to launch a demo agent in the CLASP
+                    account instead.
+                  </p>
+                  <input
+                    className={`${inputCls} mt-3`}
+                    placeholder="cpk_… (optional — get one free at clawpump.tech)"
+                    value={userKey}
+                    onChange={(e) => setUserKey(e.target.value)}
+                  />
                 </div>
                 {err && (
                   <p className="font-mono text-[11px] text-[#e0b062]">{err}</p>
@@ -250,6 +292,43 @@ export default function LaunchPad() {
                 <div className="space-y-2 font-mono text-[11px] text-[#cbb28f]">
                   <p className="break-all">mint: {result.mint}</p>
                   <p className="break-all">tx: {result.tx}</p>
+                </div>
+                <div className="rounded-xl border border-[rgba(240,180,41,0.3)] bg-[rgba(240,180,41,0.06)] px-4 py-3">
+                  <p className="text-[12px] leading-relaxed text-[#cbb28f]">
+                    {ownership === 'yours' ? (
+                      <>
+                        This agent lives in{' '}
+                        <span className="text-[#ffe4b4]">your Clawpump account</span>{' '}
+                        — manage it, chat with it, and collect its creator fees
+                        at{' '}
+                        <a
+                          href="https://clawpump.tech"
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-[#f0b429] underline decoration-[rgba(240,180,41,0.4)] underline-offset-2"
+                        >
+                          clawpump.tech
+                        </a>
+                        . Save the agent ID: <span className="break-all font-mono text-[11px] text-[#ffe0a0]">{agentId}</span>
+                      </>
+                    ) : (
+                      <>
+                        Demo mode — this agent was created in the CLASP account.
+                        The token itself is fully yours to trade on-chain, but to
+                        own and manage an agent, relaunch with your own free key
+                        from{' '}
+                        <a
+                          href="https://clawpump.tech"
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-[#f0b429] underline decoration-[rgba(240,180,41,0.4)] underline-offset-2"
+                        >
+                          clawpump.tech
+                        </a>
+                        .
+                      </>
+                    )}
+                  </p>
                 </div>
                 <div className="flex flex-wrap gap-2">
                   <a
