@@ -5,21 +5,24 @@ import { Reveal } from '../lib/motion';
 const STACK = [
   {
     name: 'Clawpump',
-    sub: 'Gasless agent launch',
+    sub: 'Agent + token engine',
+    status: 'LIVE · MAINNET',
     icon: Zap,
     tint: '#f0b429',
     glow: 'rgba(240,180,41,0.16)',
   },
   {
     name: 'Meteora DBC',
-    sub: 'Bonding curves + fees',
+    sub: 'Graduation liquidity',
+    status: 'ROADMAP',
     icon: Waves,
     tint: '#d99b2e',
     glow: 'rgba(217,155,46,0.14)',
   },
   {
     name: 'Pyth Network',
-    sub: 'The live data brain',
+    sub: 'Oracle upgrade path',
+    status: 'ROADMAP',
     icon: Radio,
     tint: '#e9c26c',
     glow: 'rgba(228,186,102,0.15)',
@@ -27,6 +30,7 @@ const STACK = [
   {
     name: 'Solana',
     sub: 'Settlement layer',
+    status: 'LIVE · MAINNET',
     icon: Cpu,
     tint: '#ecc672',
     glow: 'rgba(232,192,106,0.15)',
@@ -73,7 +77,7 @@ export default function StackBar() {
               </p>
               <div className="mt-5 h-px w-full bg-gradient-to-r from-transparent via-[rgba(214,182,116,0.18)] to-transparent" />
               <p className="mt-4 font-mono text-[8.5px] uppercase tracking-[0.22em] text-[#4e6a86]">
-                Integrated · v0.5
+                {s.status}
               </p>
             </div>
           </Reveal>
