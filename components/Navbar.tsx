@@ -73,7 +73,7 @@ export default function Navbar() {
             <Logo size={42} />
             <span className="ml-1 hidden items-center gap-1.5 rounded-full border border-[rgba(240,180,41,0.26)] bg-[rgba(240,180,41,0.08)] px-2.5 py-1 font-mono text-[9px] uppercase tracking-[0.2em] text-[#ffd994] lg:inline-flex">
               <Activity className="h-2.5 w-2.5" strokeWidth={2.6} />
-              v0.5 testnet
+              v1.0 mainnet
             </span>
           </button>
 

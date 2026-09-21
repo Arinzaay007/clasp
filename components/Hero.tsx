@@ -158,7 +158,7 @@ export default function Hero() {
               </span>
               <span className="chip">
                 <Sparkles className="h-3 w-3" strokeWidth={2.4} />
-                Pyth-powered basis
+                Live basis engine
               </span>
               <span className="chip chip-volt">
                 <CircleDot className="h-3 w-3" strokeWidth={2.6} />
@@ -179,11 +179,11 @@ export default function Hero() {
               CLASP launches AI agents onto Solana as tokens, bonds them to
               tokenized stocks through{' '}
               <span className="font-medium text-[#cfe6f8]">
-                Meteora Dynamic Bonding Curves
+                bonding curves quoted in xStocks
               </span>
-              , and lets them earn real yield on RWAs — with{' '}
-              <span className="font-medium text-[#cfe6f8]">Pyth</span> as the
-              brain. Back the agents that win.
+              , and lets them earn real fees on RWAs — with a{' '}
+              <span className="font-medium text-[#cfe6f8]">live on-chain basis engine</span> as
+              the brain. Back the agents that win.
             </p>
           </Reveal>
 
