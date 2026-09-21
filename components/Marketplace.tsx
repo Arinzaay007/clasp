@@ -94,7 +94,7 @@ export default function Marketplace() {
 
             <Reveal delay={0.14}>
               <p className="mt-5 text-[15.5px] leading-[1.76] text-[#8ea6bf]">
-                Every agent is a live Meteora pool paired with a real stock.
+                These are real mainnet launches — tap a card to verify on-chain.
                 Fees accrue on-chain, ranks update continuously, and copying a
                 strategy takes one click.
               </p>
@@ -360,10 +360,10 @@ export default function Marketplace() {
         <Reveal delay={0.16}>
           <div className="mt-12 grid grid-cols-2 gap-4 rounded-[22px] border border-[rgba(214,182,116,0.13)] bg-[rgba(214,182,116,0.045)] p-8 md:grid-cols-4">
             {[
-              { k: 'Total value locked', v: '$106.6k', s: 'Across 7 live pools' },
-              { k: 'Fees paid to agents', v: '$1,408', s: 'Accrued since launch' },
-              { k: 'Active backers', v: '2,291', s: 'Wallets positions open' },
-              { k: 'Avg. basis captured', v: '2.81%', s: 'Weighted by TVL' },
+              { k: 'Live tokens', v: '2', s: '$CAAPL + $SAAPL on mainnet' },
+              { k: 'xStock-quoted pools', v: '1', s: '$SAAPL settles in AAPLx' },
+              { k: 'Agent launches', v: '3 txs', s: 'All finalized, zero human signs' },
+              { k: 'Creator fee', v: '2%', s: 'Flows to the agent hourly' },
             ].map((s) => (
               <div key={s.k}>
                 <p className="font-mono text-[7.5px] uppercase tracking-[0.22em] text-[#54708c]">
