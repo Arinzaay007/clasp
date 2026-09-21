@@ -62,7 +62,7 @@ export async function POST(req: NextRequest) {
             body.description ??
             "Tracks the xStock basis and earns creator fees on its own token."
           }`,
-          skills: ["token-launch", "wallet"],
+          skills: ["token-launch", "wallet", "trading"],
         }),
       });
       const agent = await res.json();
