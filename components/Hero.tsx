@@ -57,45 +57,73 @@ const STATUS = {
 export default function Hero() {
   const cd = useCountdown();
   const [symbol, setSymbol] = useState('NVDA');
-  const [tick, setTick] = useState(0);
-  const anchor = ANCHORS[symbol];
   const topAgent = AGENTS.find((a) => a.symbol === symbol) ?? AGENTS[0];
 
-  const [series, setSeries] = useState<number[]>(() =>
-    buildSeries(ANCHORS.NVDA.xs)
-  );
+  // REAL data: /api/basis reads Jupiter on-chain xStock prices + official
+  // equity reference. No simulation — if the feed is down we show stale.
+  type LiveRow = {
+    symbol: string;
+    xstockUsd: number | null;
+    equityRefUsd: number | null;
+    basisPct: number | null;
+    status: 'rich' | 'cheap' | 'fair' | 'stale';
+    liquidityUsd: number | null;
+    change24hPct: number | null;
+  };
+  const [live, setLive] = useState<Record<string, LiveRow>>({});
+  const [asOf, setAsOf] = useState<string | null>(null);
+  const [history, setHistory] = useState<Record<string, number[]>>({});
 
   useEffect(() => {
-    setSeries(buildSeries(ANCHORS[symbol].xs));
-  }, [symbol]);
+    let stop = false;
+    const load = async () => {
+      try {
+        const res = await fetch('/api/basis', { cache: 'no-store' });
+        if (!res.ok) return;
+        const data = await res.json();
+        if (stop || !data.rows) return;
+        const map: Record<string, LiveRow> = {};
+        for (const r of data.rows) map[r.symbol] = r;
+        setLive(map);
+        setAsOf(data.asOf ?? null);
+        setHistory((prev) => {
+          const next = { ...prev };
+          for (const r of data.rows) {
+            if (r.xstockUsd == null) continue;
+            const arr = [...(next[r.symbol] ?? []), r.xstockUsd];
+            next[r.symbol] = arr.slice(-40);
+          }
+          return next;
+        });
+      } catch {
+        /* keep last real values; never fabricate */
+      }
+    };
+    load();
+    const id = window.setInterval(load, 15000);
+    return () => {
+      stop = true;
+      window.clearInterval(id);
+    };
+  }, []);
 
-  useEffect(() => {
-    const id = window.setInterval(() => {
-      setTick((t) => t + 1);
-      setSeries((prev) => {
-        const last = prev[prev.length - 1];
-        return [
-          ...prev.slice(1),
-          last + (Math.random() - 0.5) * ANCHORS[symbol].xs * 0.0024,
-        ];
-      });
-    }, 1900);
-    return () => window.clearInterval(id);
-  }, [symbol]);
-
-  const wave = (base: number, amp: number, phase: number) =>
-    base * (1 + Math.sin(tick * 0.82 + phase) * amp);
-
-  const eq = wave(anchor.eq, 0.0009, 1.1);
-  const xs = wave(anchor.xs, 0.00135, 2.35);
-  const on = wave(anchor.on, 0.0011, 3.65);
-  const basis = ((xs - eq) / eq) * 100;
-  const status = basis > 0.9 ? 'rich' : basis < -0.9 ? 'cheap' : 'fair';
-  const meta = STATUS[status];
+  const row = live[symbol];
+  const eq = row?.equityRefUsd ?? null;
+  const xs = row?.xstockUsd ?? null;
+  const basis = row?.basisPct ?? null;
+  const status = row?.status ?? 'stale';
+  const meta = STATUS[status === 'stale' ? 'fair' : status];
+  const rawSeries = history[symbol] ?? [];
+  const series =
+    rawSeries.length >= 2
+      ? rawSeries
+      : rawSeries.length === 1
+        ? [rawSeries[0], rawSeries[0]]
+        : [0, 0];
 
   const RADIUS = 46;
   const CIRC = 2 * Math.PI * RADIUS;
-  const arc = Math.min(96, 22 + Math.abs(basis) * 36);
+  const arc = Math.min(96, 22 + Math.abs(basis ?? 0) * 36);
 
   return (
     <section className="relative isolate overflow-hidden">
@@ -234,7 +262,7 @@ export default function Hero() {
                     CLASP Terminal
                   </p>
                   <p className="mt-0.5 text-[11px] text-[#68809c]">
-                    Basis engine · Hermes feed
+                    Basis engine · on-chain feeds
                   </p>
                 </div>
               </div>
@@ -275,7 +303,7 @@ export default function Hero() {
                     className="font-display text-[46px] font-bold leading-none tracking-[-0.035em]"
                     style={{ color: meta.color }}
                   >
-                    {pct(basis)}
+                    {basis == null ? '—' : pct(basis)}
                   </span>
                   <span
                     className="rounded-full border px-2.5 py-1 font-mono text-[8.5px] uppercase tracking-[0.18em]"
@@ -404,21 +432,21 @@ export default function Hero() {
             <div className="mt-4 space-y-px px-5">
               {[
                 {
-                  label: 'Equity (US)',
-                  feed: 'Equity.US',
+                  label: 'Equity reference',
+                  feed: 'xStocks official ref',
                   value: eq,
                   tint: '#cbb28f',
                 },
                 {
-                  label: 'xStock · 24/7',
-                  feed: 'Crypto.X',
+                  label: 'xStock · 24/7 on-chain',
+                  feed: 'Jupiter Price v3',
                   value: xs,
                   tint: '#f0b429',
                 },
                 {
-                  label: 'Ondo · 24/7',
-                  feed: 'Crypto.ON',
-                  value: on,
+                  label: 'Pool liquidity',
+                  feed: 'on-chain DEX depth',
+                  value: row?.liquidityUsd ?? null,
                   tint: '#d99b2e',
                 },
               ].map((r) => (
@@ -445,7 +473,11 @@ export default function Hero() {
                       className="font-mono text-[13px] font-medium tabular-nums"
                       style={{ color: r.tint }}
                     >
-                      ${r.value.toFixed(2)}
+                      {r.value == null
+                        ? '—'
+                        : r.value >= 10000
+                          ? r.value >= 1000000 ? `$${(r.value / 1000000).toFixed(2)}M` : `$${(r.value / 1000).toFixed(1)}k`
+                          : `$${r.value.toFixed(2)}`}
                     </p>
                     <p className="font-mono text-[8.5px] tracking-[0.12em] text-[#4f6b87]">
                       USD
@@ -466,43 +498,42 @@ export default function Hero() {
                 </div>
                 <div>
                   <p className="text-[11px] font-medium text-[#c9dcee]">
-                    {topAgent.name}
+                    $SAAPL · Stocknized AAPL Agent
                   </p>
                   <p className="font-mono text-[8.5px] tracking-[0.16em] text-[#5b7691]">
-                    TOP AGENT · {symbol} POOL
+                    LIVE ON MAINNET · QUOTED IN AAPLx
                   </p>
                 </div>
               </div>
               <div className="flex items-center gap-5">
                 <div>
                   <p className="font-mono text-[8px] tracking-[0.2em] text-[#54708c]">
-                    FEES
+                    24H Δ
                   </p>
                   <p className="font-mono text-[12px] text-[#ffe8bb]">
-                    {compactUsd(topAgent.feesEarned)}
+                    {row?.change24hPct == null
+                      ? '—'
+                      : pct(row.change24hPct, 2)}
                   </p>
                 </div>
                 <div>
                   <p className="font-mono text-[8px] tracking-[0.2em] text-[#54708c]">
-                    TVL
+                    LIQUIDITY
                   </p>
                   <p className="font-mono text-[12px] text-[#ffe9c2]">
-                    {compactUsd(topAgent.tvl)}
+                    {row?.liquidityUsd == null
+                      ? '—'
+                      : compactUsd(row.liquidityUsd)}
                   </p>
                 </div>
-                <div>
-                  <p className="font-mono text-[8px] tracking-[0.2em] text-[#54708c]">
-                    ROI
-                  </p>
-                  <p
-                    className="font-mono text-[12px]"
-                    style={{
-                      color: topAgent.roi >= 0 ? '#ffe8bb' : '#e0b062',
-                    }}
-                  >
-                    {pct(topAgent.roi, 1)}
-                  </p>
-                </div>
+                <a
+                  href="https://pump.fun/coin/DWMgU6wE3SbnvrCC41FNVFvAG8EoHCFYMW2EAvQZ4s7G"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="rounded-full border border-[rgba(240,180,41,0.4)] bg-[rgba(240,180,41,0.1)] px-3 py-1.5 font-mono text-[9px] uppercase tracking-[0.16em] text-[#ffe0a0] transition-colors hover:bg-[rgba(240,180,41,0.2)]"
+                >
+                  Trade
+                </a>
               </div>
             </div>
           </motion.div>
@@ -514,11 +545,15 @@ export default function Hero() {
             </div>
             <div>
               <p className="font-mono text-[8px] tracking-[0.22em] text-[#6f8ba7]">
-                PYTH FEEDS SYNCED
+                ON-CHAIN FEEDS LIVE
               </p>
               <p className="mt-0.5 font-mono text-[11px] text-[#c6e2f4]">
-                21 streams ·{' '}
-                <span className="text-[#ffe8bb]">{num(42)}ms</span> latency
+                {Object.keys(live).length || '—'} xStocks ·{' '}
+                <span className="text-[#ffe8bb]">
+                  {asOf
+                    ? new Date(asOf).toUTCString().slice(17, 25) + ' UTC'
+                    : 'syncing'}
+                </span>
               </p>
             </div>
           </div>

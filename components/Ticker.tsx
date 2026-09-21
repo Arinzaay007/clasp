@@ -1,19 +1,13 @@
 "use client";
-import { ANCHORS, STOCKS, pct } from '../lib/data';
+import { useEffect, useState } from 'react';
+import { pct } from '../lib/data';
 
-type Row = { symbol: string; basis: number; fees: number };
+// REAL ticker: live basis per xStock from /api/basis (Jupiter on-chain px
+// vs official equity reference). Shows '—' until first real fetch lands.
+type Row = { symbol: string; basis: number | null };
 
-const ROWS: Row[] = STOCKS.map((s, i) => {
-  const a = ANCHORS[s.symbol];
-  return {
-    symbol: s.symbol,
-    basis: ((a.xs - a.eq) / a.eq) * 100,
-    fees: 96 + i * 47.6,
-  };
-});
-
-function Row({ r }: { r: Row }) {
-  const up = r.basis >= 0;
+function TickerRow({ r }: { r: Row }) {
+  const up = (r.basis ?? 0) >= 0;
   return (
     <div className="flex items-center gap-3 whitespace-nowrap px-7">
       <span
@@ -21,13 +15,13 @@ function Row({ r }: { r: Row }) {
         style={{ background: up ? '#f0b429' : '#d99b2e' }}
       />
       <span className="font-mono text-[11px] tracking-[0.22em] text-[#7e97b4]">
-        {r.symbol}X
+        {r.symbol}x
       </span>
       <span
         className="font-mono text-[12px] font-medium"
         style={{ color: up ? '#ffe2b0' : '#ffe4b4' }}
       >
-        {pct(r.basis)}
+        {r.basis == null ? '—' : pct(r.basis)}
       </span>
       <span className="font-mono text-[10px] tracking-[0.16em] text-[#48647f]">
         basis
@@ -38,21 +32,46 @@ function Row({ r }: { r: Row }) {
 }
 
 export default function Ticker() {
+  const [rows, setRows] = useState<Row[]>([]);
+
+  useEffect(() => {
+    let stop = false;
+    const load = async () => {
+      try {
+        const res = await fetch('/api/basis', { cache: 'no-store' });
+        if (!res.ok) return;
+        const data = await res.json();
+        if (stop || !data.rows) return;
+        setRows(
+          data.rows.map((r: any) => ({ symbol: r.symbol, basis: r.basisPct }))
+        );
+      } catch {
+        /* keep last real values */
+      }
+    };
+    load();
+    const id = window.setInterval(load, 20000);
+    return () => {
+      stop = true;
+      window.clearInterval(id);
+    };
+  }, []);
+
+  if (rows.length === 0) return null;
+
   return (
     <div className="marquee-wrap relative overflow-hidden border-y border-[rgba(214,182,116,0.13)] bg-[rgba(25,18,8,0.72)]">
       <div className="py-3.5">
         <div className="marquee-track">
           {[0, 1].map((copy) => (
             <div key={copy} className="flex items-center">
-              {ROWS.map((r) => (
-                <Row key={`${copy}-${r.symbol}`} r={r} />
+              {rows.map((r) => (
+                <TickerRow key={`${copy}-${r.symbol}`} r={r} />
               ))}
             </div>
           ))}
         </div>
       </div>
-      <div className="pointer-events-none absolute inset-y-0 left-0 w-28 bg-gradient-to-r from-[#161006] to-transparent" />
-      <div className="pointer-events-none absolute inset-y-0 right-0 w-28 bg-gradient-to-l from-[#161006] to-transparent" />
     </div>
   );
 }

@@ -9,3 +9,5 @@ shot.mjs
 shot4.mjs
 verify.mjs
 clasp_capture/
+.vercel
+.env*

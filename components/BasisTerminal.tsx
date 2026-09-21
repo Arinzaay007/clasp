@@ -41,50 +41,82 @@ const STATUS_META = {
 
 type Status = keyof typeof STATUS_META;
 
+type LiveRow = {
+  symbol: string;
+  xstockUsd: number | null;
+  equityRefUsd: number | null;
+  basisPct: number | null;
+  status: 'rich' | 'cheap' | 'fair' | 'stale';
+  liquidityUsd: number | null;
+  change24hPct: number | null;
+};
+
 export default function BasisTerminal() {
   const [symbol, setSymbol] = useState('AAPL');
   const [down, setDown] = useState(false);
-  const [tick, setTick] = useState(0);
-  const base = ANCHORS[symbol];
+  const [live, setLive] = useState<Record<string, LiveRow>>({});
+  const [basisHist, setBasisHist] = useState<Record<string, number[]>>({});
 
+  // REAL feed: /api/basis — Jupiter on-chain xStock px vs official equity ref.
   useEffect(() => {
-    if (down) return;
-    const id = window.setInterval(() => setTick((t) => t + 1), 1500);
-    return () => window.clearInterval(id);
-  }, [down]);
-
-  const vals = useMemo(() => {
-    const jitter = (n: number, k: number) =>
-      n * (1 + Math.sin(tick * 0.62 + k) * 0.0012 + Math.sin(tick * 0.27 + k * 1.7) * 0.0008);
-    return {
-      eq: jitter(base.eq, 1.15),
-      xs: jitter(base.xs, 2.65),
-      on: jitter(base.on, 3.95),
+    let stop = false;
+    const load = async () => {
+      try {
+        const res = await fetch('/api/basis', { cache: 'no-store' });
+        if (!res.ok) {
+          setDown(true);
+          return;
+        }
+        const data = await res.json();
+        if (stop || !data.rows) return;
+        setDown(false);
+        const map: Record<string, LiveRow> = {};
+        for (const r of data.rows) map[r.symbol] = r;
+        setLive(map);
+        setBasisHist((prev) => {
+          const next = { ...prev };
+          for (const r of data.rows) {
+            if (r.basisPct == null) continue;
+            next[r.symbol] = [...(next[r.symbol] ?? []), r.basisPct].slice(-32);
+          }
+          return next;
+        });
+      } catch {
+        setDown(true);
+      }
     };
-  }, [base, tick]);
+    load();
+    const id = window.setInterval(load, 15000);
+    return () => {
+      stop = true;
+      window.clearInterval(id);
+    };
+  }, []);
 
-  const basis = down ? null : ((vals.xs - vals.eq) / vals.eq) * 100;
-  const status: Status = down
-    ? 'stale'
-    : basis! > 0.9
-      ? 'rich'
-      : basis! < -0.9
-        ? 'cheap'
-        : 'fair';
+  const row = live[symbol];
+  const vals = {
+    eq: row?.equityRefUsd ?? null,
+    xs: row?.xstockUsd ?? null,
+    on: row?.liquidityUsd ?? null, // repurposed: on-chain liquidity
+  };
+  const basis = down ? null : (row?.basisPct ?? null);
+  const status: Status =
+    down || basis == null
+      ? 'stale'
+      : basis > 0.75
+        ? 'rich'
+        : basis < -0.75
+          ? 'cheap'
+          : 'fair';
   const meta = STATUS_META[status];
 
-  const anchorBasis = ((base.xs - base.eq) / base.eq) * 100;
-
-  const history = useMemo(() => {
-    return Array.from({ length: 32 }, (_, i) => {
-      const t = tick - 31 + i;
-      return (
-        anchorBasis * 0.62 +
-        Math.sin(t * 0.36 + 1.2) * 0.24 +
-        Math.sin(t * 0.14 + 2.6) * 0.16
-      );
-    });
-  }, [anchorBasis, tick]);
+  const rawHist = basisHist[symbol] ?? [];
+  const history =
+    rawHist.length >= 2
+      ? rawHist
+      : rawHist.length === 1
+        ? [rawHist[0], rawHist[0]]
+        : [0, 0];
 
   return (
     <section id="terminal" className="relative overflow-hidden py-24">
@@ -111,7 +143,7 @@ export default function BasisTerminal() {
           <Reveal delay={0.14}>
             <p className="mt-5 max-w-[600px] text-[15.5px] leading-[1.76] text-[#8ea6bf]">
               Equity, xStock and Ondo prices stream simultaneously from Pyth
-              Hermes. CLASP computes the basis in real time — and the moment a
+              on-chain. CLASP computes the basis in real time — and the moment a
               feed drops, the agent refuses to trade blind.
             </p>
           </Reveal>
@@ -203,30 +235,30 @@ export default function BasisTerminal() {
                   {[
                     {
                       key: 'eq',
-                      venue: 'Equity.US',
-                      label: 'Real share · US hours',
+                      venue: 'Reference',
+                      label: 'Equity reference price',
                       value: vals.eq,
-                      feed: `Equity.US.${symbol}/USD`,
+                      feed: `xStocks official · ${symbol}`,
                       tint: '#cbb28f',
-                      change: -0.18,
+                      change: 0,
                     },
                     {
                       key: 'xs',
-                      venue: 'Crypto.X',
-                      label: 'xStock · 24/7',
+                      venue: 'On-chain',
+                      label: 'xStock · 24/7 DEX price',
                       value: vals.xs,
-                      feed: `Crypto.${symbol}X/USD`,
+                      feed: `Jupiter Price v3 · ${symbol}x`,
                       tint: '#f0b429',
-                      change: 0.42,
+                      change: row?.change24hPct ?? 0,
                     },
                     {
                       key: 'on',
-                      venue: 'Crypto.ON',
-                      label: 'Ondo · 24/7',
+                      venue: 'Depth',
+                      label: 'Pool liquidity (USD)',
                       value: vals.on,
-                      feed: `Crypto.${symbol}ON/USD`,
+                      feed: `on-chain DEX depth · ${symbol}x`,
                       tint: '#d99b2e',
-                      change: 0.27,
+                      change: 0,
                     },
                   ].map((row) => (
                     <div
@@ -285,7 +317,11 @@ export default function BasisTerminal() {
                             className="font-mono text-[17px] font-medium tabular-nums"
                             style={{ color: down ? '#6b8199' : row.tint }}
                           >
-                            {down ? '—' : `$${row.value.toFixed(2)}`}
+                            {down || row.value == null
+                              ? '—'
+                              : row.value >= 10000
+                                ? row.value >= 1000000 ? `$${(row.value / 1000000).toFixed(2)}M` : `$${(row.value / 1000).toFixed(1)}k`
+                                : `$${row.value.toFixed(2)}`}
                           </p>
                           <p
                             className="mt-0.5 font-mono text-[8.5px] tracking-[0.14em]"
@@ -297,7 +333,11 @@ export default function BasisTerminal() {
                                   : '#e0b062',
                             }}
                           >
-                            {down ? 'NO DATA' : `${row.change >= 0 ? '+' : ''}${row.change.toFixed(2)}% 24H`}
+                            {down
+                              ? 'NO DATA'
+                              : row.change === 0
+                                ? 'LIVE'
+                                : `${row.change >= 0 ? '+' : ''}${row.change.toFixed(2)}% 24H`}
                           </p>
                         </div>
                       </div>
@@ -432,7 +472,7 @@ export default function BasisTerminal() {
                       className="font-display text-[52px] font-bold leading-none tracking-[-0.038em]"
                       style={{ color: meta.color }}
                     >
-                      {down ? '—' : pct(basis!)}
+                      {down || basis == null ? "—" : pct(basis)}
                     </p>
                     <span
                       className="mb-1.5 rounded-full border px-2.5 py-1 font-mono text-[8px] uppercase tracking-[0.18em]"
@@ -450,22 +490,29 @@ export default function BasisTerminal() {
                     {[
                       {
                         k: 'xStock premium',
-                        v: down ? '—' : pct(((vals.xs - vals.eq) / vals.eq) * 100),
+                        v:
+                          down || basis == null ? '—' : pct(basis),
                         tint: '#f0b429',
                       },
                       {
-                        k: 'Ondo premium',
-                        v: down ? '—' : pct(((vals.on - vals.eq) / vals.eq) * 100),
+                        k: '24h move',
+                        v:
+                          down || row?.change24hPct == null
+                            ? '—'
+                            : pct(row.change24hPct),
                         tint: '#d99b2e',
                       },
                       {
-                        k: 'Cross-venue spread',
-                        v: down ? '—' : pct(((vals.xs - vals.on) / vals.on) * 100),
+                        k: 'Pool liquidity',
+                        v:
+                          down || row?.liquidityUsd == null
+                            ? '—'
+                            : `$${(row.liquidityUsd / 1000).toFixed(0)}k`,
                         tint: '#e9c26c',
                       },
                       {
-                        k: 'Confidence',
-                        v: down ? '0.00' : '0.98',
+                        k: 'Feed status',
+                        v: down || row == null ? 'OFFLINE' : 'LIVE',
                         tint: down ? '#e0b062' : '#ffe0a0',
                       },
                     ].map((r) => (
