@@ -212,10 +212,10 @@ export default function Hero() {
             <div className="hairline mt-11 max-w-[560px]" />
             <dl className="mt-8 grid grid-cols-2 gap-x-8 gap-y-7 sm:grid-cols-4">
               {[
-                { k: 'Stocks tracked', v: STOCKS.length, suf: '', dec: 0 },
-                { k: 'Agent TVL', v: 106.6, pre: '$', suf: 'k', dec: 1 },
-                { k: 'Active backers', v: 2291, suf: '', dec: 0 },
-                { k: 'Cost to launch', v: 0, pre: '', suf: ' SOL', dec: 0 },
+                { k: 'Stocks tracked live', v: STOCKS.length, suf: '', dec: 0 },
+                { k: 'Mainnet proof txs', v: 4, suf: '', dec: 0 },
+                { k: 'Agent tokens live', v: 2, suf: '', dec: 0 },
+                { k: 'Cost to launch', v: 0.013, pre: '~', suf: ' SOL', dec: 3 },
               ].map((s, i) => (
                 <div key={s.k}>
                   <dt className="font-mono text-[9.5px] uppercase tracking-[0.22em] text-[#6c86a4]">

@@ -1,5 +1,6 @@
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
+import ProofStrip from "@/components/ProofStrip";
 import Ticker from "@/components/Ticker";
 import StackBar from "@/components/StackBar";
 import Problem from "@/components/Problem";
@@ -19,6 +20,7 @@ export default function Home() {
       <Navbar />
       <main>
         <Hero />
+        <ProofStrip />
         <Ticker />
         <StackBar />
         <Problem />
