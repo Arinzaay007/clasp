@@ -13,11 +13,11 @@ import { Reveal } from '../lib/motion';
 
 const TREE = `clasp/
 ├── app/
-│   ├── api/clawpump/route.ts   # gasless agent launch
+│   ├── api/launch-agent/route.ts # real agent launches
 │   ├── layout.tsx
 │   └── page.tsx                # terminal surface
 ├── lib/
-│   ├── pyth.ts                 # Hermes basis engine
+│   ├── api/basis/route.ts      # live xStock basis engine
 │   ├── clawpump.ts             # Stocknized-Agent mint
 │   ├── meteora.ts              # DBC pool reads + creation
 │   ├── agents.ts               # agent model + seed data
@@ -27,8 +27,8 @@ const TREE = `clasp/
 const PIPELINE = [
   {
     icon: Database,
-    label: 'Pyth Hermes',
-    detail: 'Equity.US · Crypto.X · Crypto.ON',
+    label: 'Jupiter Price v3',
+    detail: 'On-chain xStock px · official equity ref',
     tint: '#f0b429',
   },
   {
@@ -74,7 +74,7 @@ export default function Architecture() {
 
           <Reveal delay={0.14}>
             <p className="mt-5 max-w-[620px] text-[15.5px] leading-[1.76] text-[#8ea6bf]">
-              A typed Next.js core, a Hermes-powered basis engine, and
+              A typed Next.js core, a live on-chain basis engine, and
               first-class Meteora and Clawpump integrations. Everything reads
               from chain; nothing is faked.
             </p>
@@ -180,7 +180,7 @@ export default function Architecture() {
                     'Next.js + TypeScript',
                     'Tailwind design system',
                     'Solana wallet adapter',
-                    'Pyth Hermes SDK',
+                    'Jupiter Price API v3',
                   ].map((t) => (
                     <span
                       key={t}
