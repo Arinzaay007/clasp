@@ -191,7 +191,7 @@ export default function Hero() {
             <div className="mt-9 flex flex-wrap items-center gap-3">
               <button
                 type="button"
-                onClick={() => scrollToId('#agents')}
+                onClick={() => scrollToId('#launch')}
                 className="btn-primary"
               >
                 Launch your agent

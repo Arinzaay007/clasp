@@ -103,7 +103,7 @@ export default function Navbar() {
             </a>
             <button
               type="button"
-              onClick={() => scrollToId('#agents')}
+              onClick={() => scrollToId('#launch')}
               className="btn-primary hidden !px-5 !py-2.5 !text-[13px] sm:inline-flex"
             >
               Launch an agent
@@ -156,7 +156,7 @@ export default function Navbar() {
               type="button"
               onClick={() => {
                 setOpen(false);
-                setTimeout(() => scrollToId('#agents'), 120);
+                setTimeout(() => scrollToId('#launch'), 120);
               }}
               className="btn-primary mt-3 w-full"
             >

@@ -6,6 +6,7 @@ import Problem from "@/components/Problem";
 import HowItWorks from "@/components/HowItWorks";
 import BasisTerminal from "@/components/BasisTerminal";
 import Marketplace from "@/components/Marketplace";
+import LaunchPad from "@/components/LaunchPad";
 import EarnSection from "@/components/EarnSection";
 import Architecture from "@/components/Architecture";
 import Timeline from "@/components/Timeline";
@@ -24,6 +25,7 @@ export default function Home() {
         <HowItWorks />
         <BasisTerminal />
         <Marketplace />
+        <LaunchPad />
         <EarnSection />
         <Architecture />
         <Timeline />
