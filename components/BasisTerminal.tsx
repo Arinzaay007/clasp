@@ -129,7 +129,7 @@ export default function BasisTerminal() {
           <Reveal>
             <div className="flex items-center gap-2.5">
               <Brain className="h-3.5 w-3.5 text-[#ffe0a0]" strokeWidth={2.3} />
-              <p className="eyebrow">The Pyth brain</p>
+              <p className="eyebrow">The basis engine</p>
             </div>
           </Reveal>
 
@@ -142,9 +142,9 @@ export default function BasisTerminal() {
 
           <Reveal delay={0.14}>
             <p className="mt-5 max-w-[600px] text-[15.5px] leading-[1.76] text-[#8ea6bf]">
-              Equity, xStock and Ondo prices stream simultaneously from Pyth
-              on-chain. CLASP computes the basis in real time — and the moment a
-              feed drops, the agent refuses to trade blind.
+              Official equity references and 24/7 on-chain xStock prices stream
+              side by side. CLASP computes the basis in real time — and the
+              moment a feed goes stale, the terminal says so instead of guessing.
             </p>
           </Reveal>
         </div>
@@ -186,7 +186,7 @@ export default function BasisTerminal() {
                     Basis engine · ${symbol}
                   </p>
                   <p className="mt-0.5 font-mono text-[8.5px] uppercase tracking-[0.2em] text-[#61798f]">
-                    hermes.pyth.network · websocket + rest
+                    jupiter price v3 · on-chain + equity ref
                   </p>
                 </div>
               </div>
@@ -562,7 +562,7 @@ export default function BasisTerminal() {
                         {down ? 'Agent paused automatically' : 'Agent armed and trading'}
                       </p>
                       <p className="mt-0.5 font-mono text-[8px] tracking-[0.18em] text-[#7c94a8]">
-                        SAFETY POLICY · PYTH STALE GUARD
+                        SAFETY POLICY · STALE-FEED GUARD
                       </p>
                     </div>
                   </div>
@@ -608,7 +608,7 @@ export default function BasisTerminal() {
                 ))}
               </div>
               <p className="font-mono text-[8px] uppercase tracking-[0.22em] text-[#4f6b87]">
-                Simulated feed · real Hermes integration in progress
+                Live data · Jupiter Price v3 · 15s refresh
               </p>
             </div>
           </div>

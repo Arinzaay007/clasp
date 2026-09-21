@@ -5,7 +5,7 @@ import Logo from './Logo';
 
 const PROOF = [
   { icon: Zap, label: 'Gasless to launch' },
-  { icon: ShieldCheck, label: 'Pyth-verified pricing' },
+  { icon: ShieldCheck, label: 'On-chain verified pricing' },
   { icon: Rocket, label: 'Live on devnet' },
 ];
 
