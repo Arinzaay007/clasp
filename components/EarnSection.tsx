@@ -12,7 +12,7 @@ import {
 import { compactUsd, num, usd } from '../lib/data';
 import { AnimatedNumber, Reveal, scrollToId } from '../lib/motion';
 
-const APY = 18.4;
+const APY = 18.4; // model assumption for the simulator below — real APY depends on volume
 const PRESETS = [500, 1000, 5000, 10000];
 
 const FEATURES = [
@@ -200,7 +200,7 @@ export default function EarnSection() {
                     </div>
                     <div className="text-right">
                       <p className="font-mono text-[8px] uppercase tracking-[0.22em] text-[#d6b57c]">
-                        Fee-share APY
+                        Model APY (assumed)
                       </p>
                       <p className="mt-2 font-mono text-[26px] leading-none text-[#ffe4b4]">
                         {APY}%
