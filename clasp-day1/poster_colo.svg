@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1350" width="1080" height="1350">
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="20%" r="55%">
+      <stop offset="0%" stop-color="#b6ff3c" stop-opacity="0.20"/>
+      <stop offset="55%" stop-color="#b6ff3c" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2de2e6"/>
+      <stop offset="100%" stop-color="#b6ff3c"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1080" height="1350" fill="#05070d"/>
+  <rect width="1080" height="1350" fill="url(#glow)"/>
+
+  <!-- logo badge -->
+  <rect x="260" y="120" width="560" height="350" rx="44" fill="#ffffff"/>
+  <rect x="260" y="120" width="560" height="350" rx="44" fill="none" stroke="#b6ff3c" stroke-opacity="0.25" stroke-width="2"/>
+
+  <text x="540" y="785" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="200" font-weight="800" letter-spacing="-6" fill="url(#grad)">CLASP</text>
+  <text x="540" y="855" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="50" font-weight="600" fill="#b6ff3c">Stocknized Agents</text>
+  <text x="540" y="920" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="40" fill="#cdd6e6">Liquidity is the floor. <tspan fill="#ffffff" font-weight="700">Agents are the product.</tspan></text>
+
+  <g font-family="DejaVu Sans, sans-serif" font-size="28" fill="#aef3f6">
+    <rect x="135" y="978" width="170" height="56" rx="28" fill="#2de2e614" stroke="#2de2e6" stroke-opacity="0.5"/>
+    <text x="220" y="1014" text-anchor="middle">ClawPump</text>
+    <rect x="325" y="978" width="250" height="56" rx="28" fill="#2de2e614" stroke="#2de2e6" stroke-opacity="0.5"/>
+    <text x="450" y="1014" text-anchor="middle">Meteora DBC</text>
+    <rect x="595" y="978" width="140" height="56" rx="28" fill="#2de2e614" stroke="#2de2e6" stroke-opacity="0.5"/>
+    <text x="665" y="1014" text-anchor="middle">Pyth</text>
+    <rect x="755" y="978" width="170" height="56" rx="28" fill="#2de2e614" stroke="#2de2e6" stroke-opacity="0.5"/>
+    <text x="840" y="1014" text-anchor="middle">Solana</text>
+  </g>
+
+  <text x="540" y="1118" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="30" fill="#8b96ad">gasless launch · stock-paired DBC pool</text>
+  <text x="540" y="1158" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="30" fill="#8b96ad">fails closed if the Pyth feed drops</text>
+
+  <text x="540" y="1268" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="30" fill="#7f8aa3">@he_is_arinzaay   ·   #CLASP   ·   #Stocklana</text>
+</svg>

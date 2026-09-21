@@ -1,0 +1,150 @@
+{
+  "typography": [
+    {
+      "role": "display",
+      "fontFamily": "ui-monospace",
+      "fontSize": "48px",
+      "fontWeight": "700",
+      "lineHeight": "48px",
+      "letterSpacing": "normal",
+      "color": "#E7ECF5",
+      "sampleText": "Know the true price of a tokenized stock — even at 3am."
+    },
+    {
+      "role": "body",
+      "fontFamily": "ui-monospace",
+      "fontSize": "24px",
+      "fontWeight": "700",
+      "lineHeight": "32px",
+      "letterSpacing": "normal",
+      "color": "#B6FF3C",
+      "sampleText": "24/7"
+    },
+    {
+      "role": "heading",
+      "fontFamily": "ui-monospace",
+      "fontSize": "16px",
+      "fontWeight": "600",
+      "lineHeight": "24px",
+      "letterSpacing": "normal",
+      "color": "#E7ECF5",
+      "sampleText": "Launch a Stocknized Agent"
+    },
+    {
+      "role": "code",
+      "fontFamily": "ui-monospace",
+      "fontSize": "16px",
+      "fontWeight": "400",
+      "lineHeight": "24px",
+      "letterSpacing": "normal",
+      "color": "#E7ECF5",
+      "sampleText": "(self.__next_f=self.__next_f||[]).push([0]);self.__next_f.pu"
+    },
+    {
+      "role": "heading-2",
+      "fontFamily": "ui-monospace",
+      "fontSize": "14px",
+      "fontWeight": "400",
+      "lineHeight": "20px",
+      "letterSpacing": "1.4px",
+      "color": "#94A3B8",
+      "sampleText": "How CLASP works"
+    }
+  ],
+  "spacing": {
+    "observed": [
+      4,
+      8,
+      12,
+      16,
+      20,
+      24,
+      32,
+      48
+    ],
+    "baseUnit": 4
+  },
+  "radius": [
+    "6px"
+  ],
+  "shadows": [],
+  "buttons": [
+    {
+      "label": "Back this agent",
+      "background": "#B6FF3C",
+      "backgroundImage": "",
+      "backdropFilter": "",
+      "color": "#05070D",
+      "padding": "8px 0px",
+      "borderRadius": "6px",
+      "border": "0px solid rgb(229, 231, 235)",
+      "boxShadow": "none",
+      "fontSize": "12px",
+      "fontWeight": "600",
+      "height": "32px"
+    }
+  ],
+  "cards": [],
+  "nav": {
+    "label": "navigation",
+    "background": "transparent",
+    "backgroundImage": "",
+    "backdropFilter": "",
+    "color": "#E7ECF5",
+    "padding": "20px 0px",
+    "borderRadius": "0px",
+    "border": "0px solid rgb(229, 231, 235)",
+    "boxShadow": "none",
+    "fontSize": "16px",
+    "fontWeight": "400",
+    "height": "70px"
+  },
+  "chips": [
+    {
+      "label": "7 stocks tracked",
+      "background": "transparent",
+      "color": "#94A3B8",
+      "padding": "4px 12px",
+      "borderRadius": "9999px",
+      "border": "1px solid rgb(27, 34, 51)",
+      "boxShadow": "none",
+      "fontSize": "12px",
+      "fontWeight": "400",
+      "height": "26px"
+    }
+  ],
+  "statCells": [],
+  "tabs": [],
+  "backgrounds": [
+    {
+      "value": "radial-gradient(1200px 600px at 70% -10%, rgb(17, 32, 58) 0%, rgb(5, 7, 13) 60%)",
+      "area": 3788160
+    }
+  ],
+  "glass": [
+    {
+      "backdropFilter": "blur(8px)",
+      "background": "rgba(11, 15, 26, 0.7)",
+      "border": "1px solid rgb(27, 34, 51)",
+      "borderRadius": "12px",
+      "boxShadow": "",
+      "area": 904412
+    },
+    {
+      "backdropFilter": "blur(8px)",
+      "background": "rgba(11, 15, 26, 0.7)",
+      "border": "1px solid rgb(27, 34, 51)",
+      "borderRadius": "16px",
+      "boxShadow": "",
+      "area": 353920
+    },
+    {
+      "backdropFilter": "blur(8px)",
+      "background": "rgba(11, 15, 26, 0.7)",
+      "border": "1px solid rgb(27, 34, 51)",
+      "borderRadius": "9999px",
+      "boxShadow": "",
+      "area": 41472
+    }
+  ]
+}

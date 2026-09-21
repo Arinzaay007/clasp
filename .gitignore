@@ -1,0 +1,11 @@
+node_modules
+.next
+out
+.env
+.env.local
+*.log
+.DS_Store
+shot.mjs
+shot4.mjs
+verify.mjs
+clasp_capture/

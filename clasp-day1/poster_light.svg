@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1350" width="1080" height="1350">
+  <defs>
+    <radialGradient id="tint" cx="50%" cy="16%" r="60%">
+      <stop offset="0%" stop-color="#b6ff3c" stop-opacity="0.10"/>
+      <stop offset="55%" stop-color="#b6ff3c" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1080" height="1350" fill="#ffffff"/>
+  <rect width="1080" height="1350" fill="url(#tint)"/>
+
+  <!-- logo container (light) -->
+  <rect x="270" y="130" width="540" height="340" rx="44" fill="#f3f5f7"/>
+
+  <text x="540" y="740" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="212" font-weight="800" letter-spacing="-7" fill="#0a0a0a">CLASP</text>
+  <text x="540" y="812" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="52" font-weight="700" fill="#159e4a">Stocknized Agents</text>
+  <text x="540" y="878" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="40" fill="#555555">Liquidity is the floor. <tspan fill="#0a0a0a" font-weight="700">Agents are the product.</tspan></text>
+
+  <g font-family="DejaVu Sans, sans-serif" font-size="28" fill="#0a0a0a">
+    <rect x="135" y="978" width="170" height="56" rx="28" fill="#ffffff" stroke="#0a0a0a" stroke-opacity="0.35"/>
+    <text x="220" y="1014" text-anchor="middle">ClawPump</text>
+    <rect x="325" y="978" width="250" height="56" rx="28" fill="#ffffff" stroke="#0a0a0a" stroke-opacity="0.35"/>
+    <text x="450" y="1014" text-anchor="middle">Meteora DBC</text>
+    <rect x="595" y="978" width="140" height="56" rx="28" fill="#ffffff" stroke="#0a0a0a" stroke-opacity="0.35"/>
+    <text x="665" y="1014" text-anchor="middle">Pyth</text>
+    <rect x="755" y="978" width="170" height="56" rx="28" fill="#ffffff" stroke="#0a0a0a" stroke-opacity="0.35"/>
+    <text x="840" y="1014" text-anchor="middle">Solana</text>
+  </g>
+
+  <text x="540" y="1118" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="30" fill="#777777">gasless launch · stock-paired DBC pool</text>
+  <text x="540" y="1158" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="30" fill="#777777">fails closed if the Pyth feed drops</text>
+
+  <text x="540" y="1268" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="30" fill="#888888">@he_is_arinzaay   ·   #CLASP   ·   #Stocklana</text>
+</svg>

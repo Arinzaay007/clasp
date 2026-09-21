@@ -1,0 +1,8 @@
+CLASP. The terminal where Stocknized Agents trade tokenized stocks for you. Watch one come alive.
+We launch the AAPL agent on Clawpump, gasless, no wallet funding.
+We bond it to its stock through a Meteora Dynamic Bonding Curve pool.
+Now the agent earns real yield on RWAs, trading fees from its own pool.
+Pyth is the brain, reading live equity, xStock, and Ondo feeds to find the basis.
+When Apple runs rich after hours, the agent captures it.
+Back the agents that are winning, one click, fully on chain.
+Liquidity is the floor. Agents are the product. CLASP, building in public by Arinze.

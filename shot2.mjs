@@ -1,0 +1,15 @@
+import puppeteer from 'puppeteer-core';
+import { execSync } from 'node:child_process';
+const CH = execSync("ls /tmp/chrome/chrome-headless-shell/*/chrome-headless-shell-linux64/chrome-headless-shell").toString().trim();
+const b = await puppeteer.launch({ executablePath: CH, args:['--no-sandbox','--disable-gpu','--disable-dev-shm-usage','--hide-scrollbars'], defaultViewport:{width:1280,height:860} });
+const p = await b.newPage();
+const errs = [];
+p.on('pageerror', e => errs.push('PAGEERROR: '+e.message));
+p.on('console', m => { if (m.type()==='error') errs.push('CONSOLE: '+m.text().slice(0,200)); });
+await p.goto('http://localhost:3000/', { waitUntil:'load', timeout:90000 });
+await new Promise(r=>setTimeout(r,5000));
+await p.evaluate(()=>window.scrollTo(0, 3400));
+await new Promise(r=>setTimeout(r,2000));
+await p.screenshot({ path:'shot_mid.jpg', type:'jpeg', quality:80 });
+await b.close();
+console.log(errs.slice(0,5).join('\n') || 'NO ERRORS');

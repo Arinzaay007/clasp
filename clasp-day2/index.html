@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body {
+        width: 1080px; height: 1920px; overflow: hidden;
+        background:
+          radial-gradient(900px 520px at 50% -8%, #16335f 0%, rgba(5,7,13,0) 60%),
+          radial-gradient(700px 520px at 50% 108%, #0f3a2a 0%, rgba(5,7,13,0) 60%),
+          #05070d;
+        color: #e7ecf5;
+        font-family: "Inter", "Helvetica Neue", Arial, sans-serif;
+      }
+      #root { position: relative; width: 100%; height: 100%; padding: 70px 64px; }
+      .topbar { display: flex; align-items: center; justify-content: space-between; }
+      .brand { font-size: 64px; font-weight: 800; letter-spacing: -0.04em; color: #b6ff3c; text-shadow: 0 0 50px rgba(182,255,60,0.35); }
+      .live { font-size: 22px; letter-spacing: 0.25em; text-transform: uppercase; color: #4ea8ff; border: 1px solid #1b2233; background: rgba(5,7,13,0.6); padding: 10px 18px; border-radius: 999px; }
+      .clock { font-size: 24px; color: #7f8aa3; font-variant-numeric: tabular-nums; }
+      .hero { margin-top: 26px; font-size: 34px; color: #cdd6e6; line-height: 1.35; }
+      .hero b { color: #fff; }
+
+      .card {
+        position: relative; margin-top: 46px; min-height: 1060px;
+        border: 1px solid #1b2233; border-radius: 28px; background: rgba(11,15,26,0.72);
+        box-shadow: 0 30px 80px rgba(0,0,0,0.5), inset 0 0 60px rgba(78,168,255,0.05);
+        padding: 48px;
+      }
+      .state { position: absolute; inset: 48px; opacity: 0; }
+      .kicker { font-size: 22px; letter-spacing: 0.2em; text-transform: uppercase; color: #4ea8ff; }
+      .h { font-size: 50px; font-weight: 700; margin-top: 14px; line-height: 1.12; }
+      .sub { font-size: 26px; color: #9aa6bd; margin-top: 16px; }
+
+      .term {
+        margin-top: 28px; font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+        background: rgba(5,7,13,0.65); border: 1px solid #1b2233; border-radius: 16px;
+        padding: 26px; font-size: 26px; line-height: 1.7;
+      }
+      .cmd { color: #e7ecf5; }
+      .ok { color: #b6ff3c; }
+      .cursor { display: inline-block; width: 13px; height: 26px; background: #4ea8ff; vertical-align: middle; animation: blink 1s steps(2) infinite; }
+      @keyframes blink { 50% { opacity: 0; } }
+
+      .mcard { margin-top: 16px; border: 1px solid #1b2233; border-radius: 20px; background: rgba(5,7,13,0.5); padding: 34px; }
+      .mhead { display: flex; align-items: center; justify-content: space-between; }
+      .msym { font-size: 48px; font-weight: 800; color: #fff; }
+      .mname { font-size: 26px; color: #7f8aa3; margin-left: 10px; }
+      .mchip { font-size: 20px; padding: 10px 16px; border-radius: 999px; background: rgba(182,255,60,0.12); border: 1px solid rgba(182,255,60,0.4); color: #b6ff3c; }
+      .spark { margin-top: 18px; }
+      .mstats { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; margin-top: 26px; text-align: center; }
+      .mstats .v { font-size: 38px; font-weight: 700; color: #b6ff3c; }
+      .mstats .l { font-size: 18px; color: #7f8aa3; }
+      .mbtn { margin-top: 28px; display: inline-block; font-size: 28px; font-weight: 700; color: #05070d; background: #b6ff3c; padding: 18px 36px; border-radius: 14px; }
+
+      .endcard { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; text-align: center; padding: 64px; }
+      .endcard .w { font-size: 150px; font-weight: 800; letter-spacing: -0.04em; color: #b6ff3c; text-shadow: 0 0 60px rgba(182,255,60,0.4); }
+      .endcard .t { font-size: 42px; color: #e7ecf5; margin-top: 20px; }
+      .endcard .h { font-size: 28px; color: #7f8aa3; margin-top: 26px; letter-spacing: 0.12em; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="24" data-width="1080" data-height="1920">
+      <div class="topbar">
+        <div class="brand">CLASP</div>
+        <div class="live">● Day 2</div>
+        <div class="clock" id="clock">09:16:00</div>
+      </div>
+      <div class="hero">We made the agent <b>launchable</b>.<br/>Gasless mint via Clawpump — 0 SOL.</div>
+
+      <div class="card">
+        <!-- LAUNCH PANEL -->
+        <div class="state" id="s-launch">
+          <div class="kicker">Clawpump · gasless launch</div>
+          <div class="h">Launch a Stocknized Agent</div>
+          <div class="sub">Type a ticker, hit launch — the agent token mints with zero SOL.</div>
+          <div class="term" id="termBody"></div>
+        </div>
+
+        <!-- MARKETPLACE CARD -->
+        <div class="state" id="s-card">
+          <div class="kicker">Live marketplace</div>
+          <div class="mcard">
+            <div class="mhead">
+              <div><span class="msym">AAPL</span><span class="mname">AAPL-Theta</span></div>
+              <span class="mchip">gasless · 0 SOL</span>
+            </div>
+            <div class="sub" style="margin-top:14px">Freshly launched agent — bonding to AAPL via Meteora DBC.</div>
+            <svg class="spark" width="100%" height="120" viewBox="0 0 900 120">
+              <polyline points="0,100 120,96 240,98 360,80 480,84 600,70 720,66 840,60 900,58" fill="none" stroke="#b6ff3c" stroke-width="5"/>
+            </svg>
+            <div class="mstats">
+              <div><div class="v">$0</div><div class="l">fees</div></div>
+              <div><div class="v">0%</div><div class="l">basis</div></div>
+              <div><div class="v">$0k</div><div class="l">tvl</div></div>
+              <div><div class="v">1</div><div class="l">backers</div></div>
+            </div>
+            <div class="mbtn">Back this agent →</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="endcard" id="end">
+        <div class="w">CLASP</div>
+        <div class="t">Liquidity is the floor.<br/>Agents are the product.</div>
+        <div class="h">Day 2 · gasless launch wired · #CLASP · @he_is_arinzaay</div>
+      </div>
+    </div>
+
+    <script>
+      // typing terminal
+      const tb = document.getElementById("termBody");
+      const cur = document.createElement("span");
+      cur.className = "cursor";
+      tb.appendChild(cur);
+      const lines = [
+        { t: "$ clasp launch AAPL --clawpump --gasless", c: "cmd" },
+        { t: "✓ minted agent token · 0 SOL", c: "ok" },
+        { t: "✓ pool live · liquidity $12.4K", c: "ok" },
+        { t: "✓ tx confirmed 5xQe…k9P", c: "ok" },
+      ];
+      let li = 0;
+      function startTyper() {
+        const typer = setInterval(() => {
+          if (li >= lines.length) { clearInterval(typer); return; }
+          const d = document.createElement("div");
+          d.className = lines[li].c;
+          d.textContent = lines[li].t;
+          tb.insertBefore(d, cur);
+          li++;
+        }, 900);
+      }
+      setTimeout(startTyper, 2500);
+
+      const tl = gsap.timeline({ paused: true });
+      const show = (id, at, dur) => tl.fromTo(id, { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: dur }, at);
+      const hide = (id, at) => tl.to(id, { opacity: 0, y: -24, duration: 0.5 }, at);
+
+      tl.fromTo(".topbar", { opacity: 0, y: -20 }, { opacity: 1, y: 0, duration: 0.6 }, 0.2);
+      tl.fromTo(".hero", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.6 }, 0.8);
+      tl.fromTo(".card", { opacity: 0, scale: 0.98 }, { opacity: 1, scale: 1, duration: 0.6 }, 1.6);
+
+      show("#s-launch", 2.4, 0.6);
+      hide("#s-launch", 11.5);
+      show("#s-card", 12.0, 0.6);
+      hide("#s-card", 20.5);
+      tl.fromTo(".endcard", { opacity: 0, scale: 0.97 }, { opacity: 1, scale: 1, duration: 0.8 }, 21.0);
+
+      let t = 9 * 3600 + 16 * 60;
+      tl.to({}, { duration: 24, onUpdate: () => {
+        t += 1;
+        const h = String(Math.floor(t / 3600) % 24).padStart(2, "0");
+        const m = String(Math.floor(t / 60) % 60).padStart(2, "0");
+        const s = String(t % 60).padStart(2, "0");
+        const c = document.getElementById("clock");
+        if (c) c.textContent = `${h}:${m}:${s}`;
+      } }, 0);
+
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1350" width="1080" height="1350">
+  <defs>
+    <radialGradient id="glow1" cx="50%" cy="-6%" r="60%">
+      <stop offset="0%" stop-color="#2de2e6" stop-opacity="0.18"/>
+      <stop offset="60%" stop-color="#2de2e6" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glow2" cx="50%" cy="108%" r="60%">
+      <stop offset="0%" stop-color="#b6ff3c" stop-opacity="0.14"/>
+      <stop offset="60%" stop-color="#b6ff3c" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2de2e6"/>
+      <stop offset="100%" stop-color="#b6ff3c"/>
+    </linearGradient>
+    <linearGradient id="sym" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2de2e6"/>
+      <stop offset="100%" stop-color="#b6ff3c"/>
+    </linearGradient>
+    <pattern id="grid" width="46" height="46" patternUnits="userSpaceOnUse">
+      <path d="M46 0 H0 V46" fill="none" stroke="#ffffff" stroke-opacity="0.05" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <rect width="1080" height="1350" fill="#05070d"/>
+  <rect width="1080" height="1350" fill="url(#grid)"/>
+  <rect width="1080" height="1350" fill="url(#glow1)"/>
+  <rect width="1080" height="1350" fill="url(#glow2)"/>
+
+  <!-- CLASP symbol: claw gripping a stock candlestick -->
+  <g transform="translate(390,150) scale(1.5)">
+    <rect x="12" y="12" width="176" height="176" rx="44" fill="#070b14" stroke="url(#sym)" stroke-width="7"/>
+    <path d="M148 52 C 92 18, 40 52, 52 104 C 58 134, 92 158, 128 146" fill="none" stroke="url(#sym)" stroke-width="15" stroke-linecap="round"/>
+    <path d="M148 52 l 16 -8 M148 52 l 9 15" stroke="url(#sym)" stroke-width="11" stroke-linecap="round" fill="none"/>
+    <line x1="104" y1="46" x2="104" y2="158" stroke="#b6ff3c" stroke-width="6" stroke-linecap="round"/>
+    <rect x="88" y="74" width="32" height="62" rx="9" fill="#b6ff3c"/>
+  </g>
+
+  <text x="540" y="640" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="172" font-weight="800" fill="url(#grad)">CLASP</text>
+  <text x="540" y="710" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="46" font-weight="600" fill="#2de2e6">Stocknized Agents</text>
+  <text x="540" y="782" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="40" fill="#cdd6e6">Liquidity is the floor. <tspan fill="#ffffff" font-weight="700">Agents are the product.</tspan></text>
+
+  <!-- stack chips -->
+  <g font-family="DejaVu Sans, sans-serif" font-size="28" fill="#aef3f6">
+    <rect x="135" y="858" width="170" height="56" rx="28" fill="#2de2e614" stroke="#2de2e6" stroke-opacity="0.5"/>
+    <text x="220" y="894" text-anchor="middle">ClawPump</text>
+    <rect x="325" y="858" width="250" height="56" rx="28" fill="#2de2e614" stroke="#2de2e6" stroke-opacity="0.5"/>
+    <text x="450" y="894" text-anchor="middle">Meteora DBC</text>
+    <rect x="595" y="858" width="140" height="56" rx="28" fill="#2de2e614" stroke="#2de2e6" stroke-opacity="0.5"/>
+    <text x="665" y="894" text-anchor="middle">Pyth</text>
+    <rect x="755" y="858" width="170" height="56" rx="28" fill="#2de2e614" stroke="#2de2e6" stroke-opacity="0.5"/>
+    <text x="840" y="894" text-anchor="middle">Solana</text>
+  </g>
+
+  <text x="540" y="1010" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="30" fill="#8b96ad">gasless launch · stock-paired DBC pool</text>
+  <text x="540" y="1052" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="30" fill="#8b96ad">fails closed if the Pyth feed drops</text>
+
+  <text x="540" y="1255" text-anchor="middle" font-family="DejaVu Sans, sans-serif" font-size="30" fill="#7f8aa3">@he_is_arinzaay   ·   #CLASP   ·   #Stocklana</text>
+</svg>

@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body {
+        width: 1080px; height: 1920px; overflow: hidden;
+        background:
+          radial-gradient(900px 520px at 50% -8%, #16335f 0%, rgba(5,7,13,0) 60%),
+          radial-gradient(700px 520px at 50% 108%, #0f3a2a 0%, rgba(5,7,13,0) 60%),
+          #05070d;
+        color: #e7ecf5;
+        font-family: "Inter", "Helvetica Neue", Arial, sans-serif;
+      }
+      #root { position: relative; width: 100%; height: 100%; padding: 70px 64px; }
+      .topbar { display: flex; align-items: center; justify-content: space-between; }
+      .brand { font-size: 64px; font-weight: 800; letter-spacing: -0.04em; color: #b6ff3c; text-shadow: 0 0 50px rgba(182,255,60,0.35); }
+      .live { font-size: 22px; letter-spacing: 0.25em; text-transform: uppercase; color: #4ea8ff; border: 1px solid #1b2233; background: rgba(5,7,13,0.6); padding: 10px 18px; border-radius: 999px; }
+      .clock { font-size: 24px; color: #7f8aa3; font-variant-numeric: tabular-nums; }
+      .hero { margin-top: 26px; font-size: 30px; color: #cdd6e6; line-height: 1.35; }
+      .hero b { color: #fff; }
+
+      .steps { display: flex; gap: 14px; margin-top: 40px; }
+      .step { flex: 1; text-align: center; font-size: 20px; color: #5c6678; padding: 16px 8px; border-radius: 14px; border: 1px solid #1b2233; background: rgba(11,15,26,0.5); transition: all .3s; }
+      .step.on { color: #05070d; background: #b6ff3c; border-color: #b6ff3c; font-weight: 700; }
+
+      .card {
+        position: relative; margin-top: 46px; min-height: 980px;
+        border: 1px solid #1b2233; border-radius: 28px; background: rgba(11,15,26,0.72);
+        box-shadow: 0 30px 80px rgba(0,0,0,0.5), inset 0 0 60px rgba(78,168,255,0.05);
+        padding: 48px;
+      }
+      .state { position: absolute; inset: 48px; opacity: 0; }
+      .kicker { font-size: 22px; letter-spacing: 0.2em; text-transform: uppercase; color: #4ea8ff; }
+      .h { font-size: 46px; font-weight: 700; margin-top: 14px; line-height: 1.15; }
+      .sub { font-size: 26px; color: #9aa6bd; margin-top: 16px; }
+      .mono { font-family: ui-monospace, "SFMono-Regular", Menlo, monospace; }
+      .pill { display: inline-block; margin-top: 26px; font-size: 26px; padding: 14px 22px; border-radius: 14px; background: rgba(182,255,60,0.12); border: 1px solid rgba(182,255,60,0.4); color: #b6ff3c; }
+      .big { font-size: 96px; font-weight: 800; color: #b6ff3c; letter-spacing: -0.02em; }
+      .unit { font-size: 34px; color: #9aa6bd; }
+      .row { display: flex; align-items: baseline; gap: 12px; margin-top: 30px; }
+      .backbtn { margin-top: 34px; display: inline-block; font-size: 30px; font-weight: 700; color: #05070d; background: #b6ff3c; padding: 18px 40px; border-radius: 16px; }
+
+      .basis { display: inline-block; margin-top: 28px; font-size: 40px; font-weight: 800; color: #05070d; background: #b6ff3c; padding: 12px 26px; border-radius: 14px; }
+
+      .endcard { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; text-align: center; padding: 64px; }
+      .endcard .w { font-size: 150px; font-weight: 800; letter-spacing: -0.04em; color: #b6ff3c; text-shadow: 0 0 60px rgba(182,255,60,0.4); }
+      .endcard .t { font-size: 40px; color: #e7ecf5; margin-top: 20px; }
+      .endcard .h { font-size: 30px; color: #7f8aa3; margin-top: 24px; letter-spacing: 0.14em; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="60" data-width="1080" data-height="1920">
+      <div class="topbar">
+        <div class="brand">CLASP</div>
+        <div class="live">● Live build</div>
+        <div class="clock" id="clock">02:14:09</div>
+      </div>
+      <div class="hero">The terminal where <b>Stocknized Agents</b> trade tokenized stocks for you.<br/>Watch one come alive.</div>
+
+      <div class="steps">
+        <div class="step" id="st1">1 · Launch</div>
+        <div class="step" id="st2">2 · Bond</div>
+        <div class="step" id="st3">3 · Earn</div>
+        <div class="step" id="st4">4 · Back</div>
+      </div>
+
+      <div class="card">
+        <!-- LAUNCH -->
+        <div class="state" id="s-launch">
+          <div class="kicker">Step 1 · Clawpump</div>
+          <div class="h">Launching AAPL<br/>Stocknized Agent</div>
+          <div class="sub">Gasless token launch — no wallet funding, no gas.</div>
+          <div class="pill mono" id="mint">mint: Ag…a11 ✓</div>
+        </div>
+
+        <!-- BOND -->
+        <div class="state" id="s-bond">
+          <div class="kicker">Step 2 · Meteora DBC</div>
+          <div class="h">Bonded to its stock<br/>through a DBC pool</div>
+          <div class="sub">AAPL · USDC Dynamic Bonding Curve.</div>
+          <svg width="100%" height="220" viewBox="0 0 900 220" style="margin-top:30px">
+            <path id="curve" d="M0,200 C220,200 240,40 460,40 C680,40 700,160 900,160" fill="none" stroke="#b6ff3c" stroke-width="6" stroke-linecap="round"/>
+          </svg>
+          <div class="pill mono">pool live · TVL $12.4k</div>
+        </div>
+
+        <!-- EARN -->
+        <div class="state" id="s-earn">
+          <div class="kicker">Step 3 · Earn on RWAs</div>
+          <div class="h">The agent earns real yield</div>
+          <div class="sub">Trading fees from its own stock pool.</div>
+          <div class="row"><div class="big" id="fees">$0.00</div><div class="unit">fees earned (RWA)</div></div>
+          <svg width="100%" height="120" viewBox="0 0 900 120" style="margin-top:18px">
+            <polyline id="spark" points="0,100 120,90 240,95 360,70 480,60 600,48 720,40 840,30 900,22" fill="none" stroke="#4ea8ff" stroke-width="5"/>
+          </svg>
+        </div>
+
+        <!-- PYTH -->
+        <div class="state" id="s-pyth">
+          <div class="kicker">Step 3b · Pyth brain</div>
+          <div class="h">Pyth is the brain</div>
+          <div class="sub">Live equity · xStock · Ondo feeds → the basis.</div>
+          <svg width="100%" height="200" viewBox="0 0 900 200" style="margin-top:24px">
+            <path id="pl-eq" d="M0,150 C200,150 250,150 450,150 C650,150 700,150 900,150" fill="none" stroke="#7f8aa3" stroke-width="5"/>
+            <path id="pl-xs" d="M0,120 C220,120 260,60 460,60 C660,60 700,40 900,40" fill="none" stroke="#4ea8ff" stroke-width="5"/>
+            <path id="pl-on" d="M0,130 C220,130 260,80 460,80 C660,80 700,70 900,70" fill="none" stroke="#b6ff3c" stroke-width="5"/>
+          </svg>
+          <div class="basis" id="basis">basis +3.1% · RICH</div>
+        </div>
+
+        <!-- BACK -->
+        <div class="state" id="s-back">
+          <div class="kicker">Step 4 · Social</div>
+          <div class="h">Back &amp; copy the<br/>agents winning</div>
+          <div class="row"><div class="big" id="backers">0</div><div class="unit">backers</div></div>
+          <div class="backbtn">Back this agent →</div>
+        </div>
+      </div>
+
+      <div class="endcard" id="end">
+        <div class="w">CLASP</div>
+        <div class="t">Liquidity is the floor.<br/>Agents are the product.</div>
+        <div class="h">#CLASP · @he_is_arinzaay</div>
+      </div>
+    </div>
+
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      const show = (id, at, dur) => tl.fromTo(id, { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.6 }, at);
+      const hide = (id, at) => tl.to(id, { opacity: 0, y: -24, duration: 0.5 }, at);
+      const step = (id, at) => tl.to(id, { className: "step on" }, at);
+
+      // boot
+      tl.fromTo(".topbar", { opacity: 0, y: -20 }, { opacity: 1, y: 0, duration: 0.6 }, 0.2);
+      tl.fromTo(".hero", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.6 }, 0.8);
+      tl.fromTo(".steps", { opacity: 0 }, { opacity: 1, duration: 0.5 }, 1.4);
+      tl.fromTo(".card", { opacity: 0, scale: 0.98 }, { opacity: 1, scale: 1, duration: 0.6 }, 1.8);
+
+      // LAUNCH 2-9
+      show("#s-launch", 2.4, 0.6); step("#st1", 2.4);
+      tl.fromTo("#mint", { opacity: 0 }, { opacity: 1, duration: 0.5 }, 5.5);
+      hide("#s-launch", 9.0);
+
+      // BOND 9.5-17
+      show("#s-bond", 9.6, 0.6); step("#st2", 9.6);
+      tl.fromTo("#curve", { strokeDasharray: 1000, strokeDashoffset: 1000 }, { strokeDashoffset: 0, duration: 4, ease: "power1.inOut" }, 10.2);
+      tl.fromTo("#s-bond .pill", { opacity: 0 }, { opacity: 1, duration: 0.5 }, 14.5);
+      hide("#s-bond", 17.0);
+
+      // EARN 17.5-30
+      show("#s-earn", 17.6, 0.6); step("#st3", 17.6);
+      const fees = { v: 0 };
+      tl.to(fees, { v: 184.2, duration: 9, ease: "power1.out", onUpdate: () => { document.getElementById("fees").textContent = "$" + fees.v.toFixed(2); } }, 18.5);
+      tl.fromTo("#spark", { strokeDasharray: 1200, strokeDashoffset: 1200 }, { strokeDashoffset: 0, duration: 6, ease: "none" }, 19.0);
+      hide("#s-earn", 30.0);
+
+      // PYTH 30.5-40
+      show("#s-pyth", 30.6, 0.6);
+      tl.fromTo("#pl-eq", { strokeDasharray: 1200, strokeDashoffset: 1200 }, { strokeDashoffset: 0, duration: 3 }, 31.2);
+      tl.fromTo("#pl-xs", { strokeDasharray: 1200, strokeDashoffset: 1200 }, { strokeDashoffset: 0, duration: 3 }, 31.8);
+      tl.fromTo("#pl-on", { strokeDasharray: 1200, strokeDashoffset: 1200 }, { strokeDashoffset: 0, duration: 3 }, 32.4);
+      tl.fromTo("#basis", { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.6 }, 36.0);
+      hide("#s-pyth", 40.0);
+
+      // BACK 40.5-50
+      show("#s-back", 40.6, 0.6); step("#st4", 40.6);
+      const bk = { v: 0 };
+      tl.to(bk, { v: 312, duration: 7, ease: "power1.out", onUpdate: () => { document.getElementById("backers").textContent = Math.round(bk.v); } }, 41.5);
+      tl.fromTo(".backbtn", { scale: 1 }, { scale: 1.06, duration: 0.5, yoyo: true, repeat: 3 }, 47.0);
+      hide("#s-back", 50.0);
+
+      // END 52-60
+      tl.fromTo(".endcard", { opacity: 0, scale: 0.97 }, { opacity: 1, scale: 1, duration: 0.8 }, 52.5);
+
+      // gentle live ticks during hold
+      const fees2 = { v: 184.2 };
+      tl.to(fees2, { v: 214.6, duration: 20, ease: "none", onUpdate: () => { const e = document.getElementById("fees"); if (e) e.textContent = "$" + fees2.v.toFixed(2); } }, 30.0);
+
+      // clock tick
+      let t = 2 * 3600 + 14 * 60 + 9;
+      tl.to({}, { duration: 60, onUpdate: () => { t += 1; const h = String(Math.floor(t/3600)%24).padStart(2,"0"); const m = String(Math.floor(t/60)%60).padStart(2,"0"); const s = String(t%60).padStart(2,"0"); const c = document.getElementById("clock"); if (c) c.textContent = `${h}:${m}:${s}`; } }, 0);
+
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

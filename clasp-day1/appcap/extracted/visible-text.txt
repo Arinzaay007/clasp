@@ -1,0 +1,132 @@
+[span] Clawpump Launched Agents for Stocknized Pools
+[a] @he_is_arinzaay
+[span] ● LIVE BASIS
+[span] AAPL
+[span] 2.5
+[span] NVDA
+[span] 1.7
+[span] TSLA
+[span] 0.5
+[span] MSFT
+[span] -0.8
+[span] AMZN
+[span] 1.3
+[span] GOOGL
+[span] 2.4
+[span] META
+[span] 1.8
+[p] Stocklana · Solana hackathon
+[h1] Know the true price of a tokenized stock —
+[span] even at 3am.
+[p] CLASP launches a Stocknized Agent for every tokenized stock via
+[span] Clawpump
+[p] , bonds it to its stock through a
+[span] Meteora
+[p] Dynamic Bonding Curve pool, and lets the agent
+[span] earn on RWAs
+[p] . Pyth feeds are the brain.
+[span] stocks tracked
+[span] live agents
+[span] Bounties: Main · Clawpump · Meteora · Pyth
+[p] 24/7
+[p] Tokenized stocks trade around the clock on Solana.
+[p] 6.5h
+[p] The real share only prices during US market hours.
+[p] After close, xStock decouples — you fly blind on price.
+[h2] How CLASP works
+[p] 🐾 Clawpump
+[h3] Launch a Stocknized Agent
+[p] Gasless agent token per stock, paired with its RWA on Meteora.
+[p] 💧 Meteora DBC
+[h3] Bond it to the stock
+[p] A Dynamic Bonding Curve pool makes the agent liquid and earns fees.
+[p] 💰 Earn on RWAs
+[h3] Real yield, real assets
+[p] Trading fees from the stock pool = the agent earns on real-world assets.
+[p] 📡 Pyth
+[h3] The brain
+[p] Live equity vs xStock vs Ondo feeds compute each agent's basis + rank.
+[p] 🤝 Social
+[h3] Back & copy
+[p] Back the agents winning the basis. One click, fully on-chain.
+[h2] Stocknized Agent marketplace
+[p] NVDA
+[p] NVDA-Vertex
+[span] 12.1
+[p] Mean-reversion on NVDAx basis dislocations.
+[p] 421.9
+[p] fees (RWA)
+[p] 4.8
+[p] basis
+[p] 540
+[p] backers
+[button] Back this agent
+[p] MSFT
+[p] MSFT-Omega
+[span] 4.8
+[p] Low-vol basis accumulator.
+[p] 233
+[p] fees (RWA)
+[p] 1.9
+[p] basis
+[p] 401
+[p] backers
+[button] Back this agent
+[p] META
+[p] META-Beta
+[span] 8.9
+[p] Event-driven basis (earnings/guidance).
+[p] 201.3
+[p] fees (RWA)
+[p] 3.6
+[p] basis
+[p] 364
+[p] backers
+[button] Back this agent
+[p] AAPL
+[p] AAPL-Theta
+[span] 6.4
+[p] Captures after-hours xStock premium vs equity.
+[p] 184.2
+[p] fees (RWA)
+[p] 3.1
+[p] basis
+[p] 312
+[p] backers
+[button] Back this agent
+[p] AMZN
+[p] AMZN-Alpha
+[span] 5.5
+[p] Cross-venue (xStock vs Ondo) arb.
+[p] 158.7
+[p] fees (RWA)
+[p] 2.7
+[p] basis
+[p] 277
+[p] backers
+[button] Back this agent
+[p] GOOGL
+[p] GOOGL-Gamma
+[span] 3.2
+[p] Fair-value anchored LP.
+[p] 112.4
+[p] fees (RWA)
+[p] 1.4
+[p] basis
+[p] 209
+[p] backers
+[button] Back this agent
+[p] TSLA
+[p] TSLA-Sigma
+[span] -1.3
+[p] Earnings-window basis harvesting.
+[p] 96.5
+[p] fees (RWA)
+[p] 2.2
+[p] basis
+[p] 188
+[p] backers
+[button] Back this agent
+[p] CLASP — Clawpump Launched Agents for Stocknized Pools. Built for Stocklana (Solana). Targeting Main · Clawpump · Meteora DBC · Pyth.
+[p] Building in public from
+[a] @he_is_arinzaay
