@@ -12,6 +12,13 @@ import { Reveal } from '../lib/motion';
 
 type Phase = 'form' | 'creating' | 'fund' | 'launching' | 'done' | 'error';
 
+/** Injected Solana wallet provider (Phantom, Solflare, Backpack…). */
+function getWalletProvider(): any | null {
+  if (typeof window === 'undefined') return null;
+  const w = window as any;
+  return w.phantom?.solana ?? w.solana ?? w.solflare ?? null;
+}
+
 export default function LaunchPad() {
   const [phase, setPhase] = useState<Phase>('form');
   const [name, setName] = useState('');
@@ -108,6 +115,47 @@ export default function LaunchPad() {
     navigator.clipboard?.writeText(wallet);
     setCopied(true);
     window.setTimeout(() => setCopied(false), 1600);
+  };
+
+  // one-click funding via injected wallet (Phantom / Solflare / Backpack)
+  const [funding, setFunding] = useState(false);
+  const [fundMsg, setFundMsg] = useState('');
+  const fundWithWallet = async () => {
+    setFundMsg('');
+    const provider = getWalletProvider();
+    if (!provider) {
+      setFundMsg('No Solana wallet found — install Phantom, or send manually below.');
+      return;
+    }
+    setFunding(true);
+    try {
+      const { Connection, PublicKey, SystemProgram, Transaction } =
+        await import('@solana/web3.js');
+      const resp = await provider.connect();
+      const from = new PublicKey(
+        resp?.publicKey?.toString() ?? provider.publicKey.toString()
+      );
+      const conn = new Connection('https://api.mainnet-beta.solana.com', 'confirmed');
+      const tx = new Transaction().add(
+        SystemProgram.transfer({
+          fromPubkey: from,
+          toPubkey: new PublicKey(wallet),
+          lamports: Math.round(0.014 * 1e9),
+        })
+      );
+      tx.feePayer = from;
+      tx.recentBlockhash = (await conn.getLatestBlockhash()).blockhash;
+      const { signature } = await provider.signAndSendTransaction(tx);
+      setFundMsg(`Sent — tx ${signature.slice(0, 8)}… confirming, balance updates below.`);
+    } catch (e: any) {
+      setFundMsg(
+        e?.message?.includes('User rejected')
+          ? 'Transaction cancelled in wallet.'
+          : e?.message ?? 'Wallet transfer failed — you can still send manually below.'
+      );
+    } finally {
+      setFunding(false);
+    }
   };
 
   const inputCls =
@@ -232,6 +280,29 @@ export default function LaunchPad() {
                   <span className="text-[#ffe4b4]">at least 0.013 SOL</span>{' '}
                   (launch cost ≈0.0095 + fees). It pays for its own launch —
                   that&apos;s the point.
+                </p>
+                <button
+                  type="button"
+                  onClick={fundWithWallet}
+                  disabled={funding}
+                  className="btn-primary flex w-full items-center justify-center gap-2 rounded-xl px-5 py-3.5 text-[14px] font-semibold disabled:opacity-60"
+                >
+                  {funding ? (
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin" /> Confirm in your
+                      wallet…
+                    </>
+                  ) : (
+                    <>
+                      <Wallet className="h-4 w-4" /> Fund 0.014 SOL with Phantom
+                    </>
+                  )}
+                </button>
+                {fundMsg && (
+                  <p className="font-mono text-[11px] text-[#e0b062]">{fundMsg}</p>
+                )}
+                <p className="text-center font-mono text-[10px] tracking-[0.14em] text-[#8a7a58]">
+                  OR SEND MANUALLY FROM ANY WALLET
                 </p>
                 <button
                   type="button"
