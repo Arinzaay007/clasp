@@ -11,3 +11,4 @@ verify.mjs
 clasp_capture/
 .vercel
 .env*
+video/scenes/
