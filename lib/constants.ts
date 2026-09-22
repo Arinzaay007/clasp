@@ -8,7 +8,7 @@ export const USDC_MINT = "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v";
 export const SOL_MINT = "So11111111111111111111111111111111111111112";
 
 export const CLAWPUMP_API = "https://clawpump.tech/api";
-export const HERMES_URL = "https://hermes.pyth.network";
+// legacy, unused — basis engine uses Jupiter Price v3 (see app/api/basis)
 
 // Tokenized stocks we track. Feed *symbols* resolve to Pyth feed IDs
 // via the official list: https://pyth.network/developers/price-feed-ids

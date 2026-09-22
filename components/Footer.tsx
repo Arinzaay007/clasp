@@ -162,9 +162,9 @@ export default function Footer() {
         {/* protocol strip */}
         <div className="mt-16 grid grid-cols-2 gap-4 rounded-[20px] border border-[rgba(214,182,116,0.12)] bg-[rgba(214,182,116,0.04)] p-7 md:grid-cols-4">
           {[
-            ['DBC program', 'dbcij3…SaqN'],
-            ['Pool authority', 'FhVo3m…HLuM'],
-            ['Hermes endpoint', 'hermes.pyth.network'],
+            ['$SAAPL mint', 'DWMgU6…4s7G'],
+            ['$CAAPL mint', '6AjyCg…Mwrv'],
+            ['Price feed', 'lite-api.jup.ag/price/v3'],
             ['Launch API', 'clawpump.tech/api'],
           ].map(([k, v]) => (
             <div key={k}>

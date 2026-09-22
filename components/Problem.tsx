@@ -319,7 +319,7 @@ export default function Problem() {
 
               <div className="mt-5 flex flex-wrap items-center gap-x-6 gap-y-2">
                 <p className="font-mono text-[9px] uppercase tracking-[0.2em] text-[#5d7994]">
-                  Source: Pyth Hermes · Equity.US / Crypto.X / Crypto.ON feeds
+                  Source: Jupiter Price v3 · on-chain xStock px + official equity ref
                 </p>
                 <div className="ml-auto flex items-center gap-2">
                   <span className="live-dot h-1.5 w-1.5 rounded-full bg-[#f0b429]" />
